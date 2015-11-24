@@ -5,10 +5,29 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
+	<script src="js/jquery.min.js"></script>
 	<script src="js/game.js"></script>
-	<script src"js/gui.js"></script>
+	<script src="js/gui.js"></script>
 </head>
 <body>
-	
+	<h1>Current player: <span id="playerDisplay"></span></h1>
+	<div class="board">
+		<div class="row">
+			<div class="tile" id="A">?</div>
+			<div class="tile" id="B">?</div>
+			<div class="tile" id="C">?</div>
+		</div>
+		<div class="row">
+			<div class="tile" id="D">?</div>
+			<div class="tile" id="E">?</div>
+			<div class="tile" id="F">?</div>
+		</div>
+		<div class="row">
+			<div class="tile" id="G">?</div>
+			<div class="tile" id="H">?</div>
+			<div class="tile" id="I">?</div>
+		</div>
+	</div>
+	<h1 id="winnerDisplay"></h1>
 </body>
 </html>

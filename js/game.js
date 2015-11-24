@@ -18,11 +18,26 @@ var winCombos = {
 	v2: ['B', 'E', 'H'],
 	v3: ['C', 'F', 'I'],
 	d1: ['A', 'E', 'I'],
-	d2: ['C', 'E', 'H']
+	d2: ['C', 'E', 'G']
+};
+
+var players = ['X', 'O'];
+var currentPlayer = 'X';
+
+var switchPlayer = function () {
+	if (currentPlayer === players[0]) {
+		currentPlayer = players[1];
+	} else {
+		currentPlayer = players[0];
+	}
+};
+
+var placePlayerPiece = function (player, position) {
+	board[position] = currentPlayer;
 };
 
 var winnerSet = [];
-var winner;
+var winner = "none";
 
 var checkWins = function () {
 	for (var i = 0; i < Object.keys(winCombos).length; i++) {
@@ -35,15 +50,9 @@ var checkWins = function () {
 		if (checkSet === "XXX") {
 			winnerSet = winSet;
 			winner = 'X';
-		}
-		if (checkSet === "OOO") {
+		} else if (checkSet === "OOO") {
 			winnerSet = winSet;
 			winner = 'O';
 		}
 	};
-	console.log(checkSet);
 };
-
-checkWins();
-console.log("Winning set: " + winnerSet + " Winning Player: " + winner);
-
