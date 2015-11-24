@@ -37,7 +37,7 @@ var placePlayerPiece = function (player, position) {
 };
 
 var winnerSet = [];
-var winner = "none";
+var winner;
 
 var checkWins = function () {
 	for (var i = 0; i < Object.keys(winCombos).length; i++) {
@@ -50,9 +50,12 @@ var checkWins = function () {
 		if (checkSet === "XXX") {
 			winnerSet = winSet;
 			winner = 'X';
+			return true;
 		} else if (checkSet === "OOO") {
 			winnerSet = winSet;
 			winner = 'O';
+			return true;
 		}
 	};
+	return false;
 };

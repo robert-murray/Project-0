@@ -1,20 +1,17 @@
 $(document).ready(function() {
-    var selectedTile;
     $("#playerDisplay").text(currentPlayer);
-    $(".tile").click(function(tile) {
-        selectedTile = tile.target.id;
-        placePlayerPiece(currentPlayer, selectedTile);
+    $(".tile").click(function() {
+        placePlayerPiece(currentPlayer, $(this).attr('id'));
         $(this).text(currentPlayer);
-   		checkWins();
-   		$("#winnerDisplay").text("Winning Player: " + winner + " " + winnerSet);
-        switchPlayer();
-   		$("#playerDisplay").text(currentPlayer);
+        $(this).off();
+        checkWins();
+        if (checkWins()) {
+          $("#winnerDisplay").text("Winning Player: " + winner + " " + winnerSet);
+          $(".tile").off();
+        } else {
+          $("#winnerDisplay").text("No winner yet.");
+          switchPlayer();
+          $("#playerDisplay").text(currentPlayer);
+        }
     });
 });
-
-// set up players
-// switch between players
-// get the tile ID on click
-// set the move to board tile gui
-// set the move to game.js board
-// check for potential wins
