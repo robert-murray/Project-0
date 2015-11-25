@@ -38,7 +38,6 @@ var placePlayerPiece = function (player, position) {
 
 var winnerSet = [];
 var winner;
-
 var checkWins = function () {
 	for (var i = 0; i < Object.keys(winCombos).length; i++) {
 		var winSet = winCombos[Object.keys(winCombos)[i]];
@@ -59,3 +58,18 @@ var checkWins = function () {
 	};
 	return false;
 };
+
+var computerMove = function () {
+	var emptyPositions = [];
+	for (var i = 0; i < Object.keys(board).length; i++) {
+		if (board[Object.keys(board)[i]] === null) {
+			emptyPositions.push(Object.keys(board)[i]);
+		}
+	}
+	return emptyPositions[parseInt(Math.random()*emptyPositions.length)];
+};
+
+
+
+
+
