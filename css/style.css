@@ -18,31 +18,52 @@ h1 {
 	margin: 30px auto;
 	width: 500px;
 	height: 500px;
-	padding: 5px;
-	background: #003d64;
-	box-shadow: inset 0px 3px 0px 0px rgba(2, 2, 2, 0.1);
-    border-radius: 10x;
-    	-moz-border-radius: 10px;
-    	-webkit-border-radius: 10px;
+	padding: 10px;
+	background-color: rgba(0, 0, 0, 0.15);
+	box-shadow: inset 0px 4px 0px 0px rgba(2, 2, 2, 0.1);
+    border-radius: 15x;
+    	-moz-border-radius: 15px;
+    	-webkit-border-radius: 15px;
 }
 
 .row {
 	display: block;
+	height: 30%;
+    margin-bottom: 14px;
 }
 
 .tile {
-	width: 31.5%;
+	width: 30%;
+	height: 100%;
 	display: inline-block;
-	color: #f4f4f4;
+	color: rgba(255, 255, 255, 0.5);
 	text-align: center;
-	line-height: 160px;
-    background: #006b92;
+	line-height: 150px;
+    background-color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
-    margin-left: 5px;
-    margin-top: 5px;
-    font-size: 80px;
-    box-shadow: inset 0px -4px 0px 0px rgba(2, 2, 2, 0.1);
-    border-radius: 4px;
-    	-moz-border-radius: 4px;
-    	-webkit-border-radius: 4px;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-size: 70px;
+    box-shadow: inset 0px -5px 0px 0px rgba(2, 2, 2, 0.2);
+    border-radius: 7px;
+    	-moz-border-radius: 7px;
+    	-webkit-border-radius: 7px;
+}
+
+.tile:hover {
+	background-color: rgba(255, 255, 255, 0.7);
+	transition: all .2s ease-in-out;
+		-webkit-transition: all .2s ease-in-out;
+  		-moz-transition: all .2s ease-in-out;
+  		-ms-transition: all .2s ease-in-out;
+  		-o-transition: all .2s ease-in-out;
+}
+
+.tileSelected {
+	background-color: rgba(255, 255, 255, 0.9);
+	transition: all .5s ease-in-out;
+		-webkit-transition: all .5s ease-in-out;
+  		-moz-transition: all .5s ease-in-out;
+  		-ms-transition: all .5s ease-in-out;
+  		-o-transition: all .5s ease-in-out;
 }

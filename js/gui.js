@@ -3,6 +3,12 @@ $(document).ready(function() {
     $(".tile").click(function() {
         placePlayerPiece(currentPlayer, $(this).attr('id'));
         $(this).text(currentPlayer);
+        $(this).addClass("tileSelected");
+        if (currentPlayer === "X") {
+          $(this).css('color', '#fb6e52');
+        } else {
+          $(this).css('color', '#399c95');
+        }
         $(this).off();
         checkWins();
         if (checkWins()) {
