@@ -83,21 +83,10 @@ h1 {
   		-o-transition: all .1s ease-in-out;
 }
 
-.xWinBG {
-	background: #2e3846;
-	transition: all .1s ease-in-out;
-		-webkit-transition: all .1s ease-in-out;
-  		-moz-transition: all .1s ease-in-out;
-  		-ms-transition: all .1s ease-in-out;
-  		-o-transition: all .1s ease-in-out;
+.tileTextX {
+	color: #fb6e52;
 }
 
-.oWinBG {
-	visibility: visible;
-	transition: all .1s ease-in-out;
-		-webkit-transition: all .1s ease-in-out;
-  		-moz-transition: all .1s ease-in-out;
-  		-ms-transition: all .1s ease-in-out;
-  		-o-transition: all .1s ease-in-out;
+.tileTextO {
+	color: #399c95;
 }
-

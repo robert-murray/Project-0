@@ -1,119 +1,198 @@
-$(document).ready(function() {
-//    var myDataRef = new Firebase('https://tictactoe01.firebaseio.com/');
+$(document).ready(function () {
     
+    // sets variable to record game type 
+    // 'vsPlayer' = Player vs Player, or 
+    // 'vsComputer' = Player vs Computer
+    var gameTypeInPlay;
+
+    // Main menu modal using flavr.js plugin
+    // includes option to initiate vs Computer or vs Player game
     new $.flavr({
-        title  : "IT'S TIC TAC TOE TIME",
-        content  : 'What type of game would you like to play?',
-        // iconPath : 'flavr/images/icons/',
-        // icon     : 'star.png',
-        buttons  : {
-        pvpButton  : { text: 'Player Vs Player', style: 'primary', addClass: 'submit-btn', 
-                    action: function(){
-                        playerVsPlayer();
-                    }
+        title: "IT'S TIC TAC TOE TIME",
+        content: 'What type of game would you like to play?',
+        buttons: {
+            pvpButton: {
+                text: 'Player Vs Player',
+                style: 'primary',
+                addClass: 'submit-btn',
+                action: function () {
+                    gameTypeInPlay = 'vsPlayer';
+                    playerVsPlayer();
+                    $getBoardAndText.css('visibility', 'visible');
+                }
+            },
+            pvcButton: {
+                text: 'Player Vs computer',
+                style: 'info',
+                addClass: 'submit-btn',
+                action: function () {
+                    gameTypeInPlay = 'vsComputer';
+                    playerVsComputer();
+                    $getBoardAndText.css('visibility', 'visible');
+                }
+            }
         },
-        pvcButton  : { text: 'Player Vs computer', style: 'info', addClass: 'submit-btn', 
-                    action: function(){
-                        playerVsComputer();
-                    }
-        }
-      },
-      buttonDisplay : 'stacked'
+        buttonDisplay: 'stacked'
     });
 
+    // Winner modal using flavr.js plugin
+    // Has option to replay opponant or reset game (via page reload)
     var winnerModal = function () {
-      var winnerTitle = "THE WINNER IS: " + winner;
-      new $.flavr({
-          title  : winnerTitle,
-          content  : 'Would you like to play again?',
-          iconPath : 'images/',
-          icon     : 'star.png',
-          buttons  : {
-          pvpButton  : { text: 'Yes, play opponant again', style: 'primary', addClass: 'submit-btn', 
-                      action: function(){
-                          playerVsPlayer();
-                      }
-          },
-          pvcButton  : { text: 'No, go to the main menu', style: 'danger', addClass: 'submit-btn', 
-                      action: function(){
-                          playerVsComputer();
-                      }
-          }
-        },
-        buttonDisplay : 'stacked'
-      });
+        var winnerTitle = "THE WINNER IS " + winner;
+        new $.flavr({
+            title: winnerTitle,
+            content: 'Would you like to play again?',
+            iconPath: 'images/',
+            icon: 'star.png',
+            buttons: {
+                pvpButton: {
+                    text: 'Yes, play opponant again',
+                    style: 'primary',
+                    addClass: 'submit-btn',
+                    action: function () {
+                        resetBoard();
+                    }
+                },
+                pvcButton: {
+                    text: 'No, go to the main menu',
+                    style: 'danger',
+                    addClass: 'submit-btn',
+                    action: function () {
+                        location.reload();
+                    }
+                }
+            },
+            buttonDisplay: 'stacked'
+        });
     };
 
+    // Sets jquery var for current player heading and all html board elements
     var $getBoardAndText = $("#currentPlayerH1, .board");
+    
+    // Hides board elements at startup (while main menu is showing)
     $getBoardAndText.css('visibility', 'hidden');
+
+    // Sets string with CSS class
+    // Used to change the tile text color 
+    var getPlayerColor = function () {
+        if (currentPlayer === "X") {
+            return 'tileTextX';
+        } else {
+            return 'tileTextO';
+        }
+    };
+
+    // Sets string with HEX colour value 
+    // Used to change the 'body' background to player colour on win
+    var getWinnerColor = function () {
+        if (winner === "X") {
+            return '#fb6e52';
+        } else {
+            return '#399c95';
+        }
+    };
+
+    // Assign current player string ('X' or 'O') to board object 
+    // Uses selected tile's ID to wirite to appropriate key in board data
+    // Assigns current player string to selected tile's text (html element)
+    // Assigns current player's colour to selected tile's text (html element)
+    // Turns off click function for selected tile
     var executePlayerMove = function () {
         placePlayerPiece(currentPlayer, $(this).attr('id'));
         $(this).text(currentPlayer);
         $(this).addClass("tileSelected");
-        (currentPlayer === "X") ? $(this).css('color', '#fb6e52') : $(this).css('color', '#399c95');
+        $(this).addClass(getPlayerColor());
         $(this).off();
     };
 
-    var getPlayerColor = function () {
-      if (currentPlayer === "X") {
-        return '#fb6e52';
-      } else {
-        return '#399c95';
-      }
-    };
-
-    var getWinnerColor = function () {
-      if (winner === "X") {
-        return '#fb6e52';
-      } else {
-        return '#399c95';
-      }
-    };
-
+    // Assign current player string ('X' or 'O') to board object 
+    // Sets a random letter string value of any empty postition array
+    // Uses random string value to wirite to appropriate key in board data
+    // Assigns current player string ('X' or 'O') tile's text (html element)
+    //  - using random letter as ID value
+    // Assigns current player's colour to tile's text (html element)
+    // Turns off click function for selected tile
     var executeComputerMove = function () {
         var setComputerMove = computerMove();
         var computerMoveToID = '#' + setComputerMove;
         placePlayerPiece(currentPlayer, setComputerMove);
         $(computerMoveToID).text(currentPlayer);
         $(computerMoveToID).addClass("tileSelected");
-        $(computerMoveToID).css('color', getPlayerColor());
+        $(computerMoveToID).addClass(getPlayerColor());
         $(computerMoveToID).off();
     };
 
+    // Truns off click function for all tiles
+    // Saves string of element IDs based on winnerSet
+    // Toggles / Adds classes to highligh winning tiles
+    // Fades BG color to winners color
+    // Fades BG back to default color
+    // Displays winner modal
     var checkWinsGUIevents = function () {
         if (checkWins()) {
-          $(".tile").off();
-          var winnerSetToID = winnerSet.map(function(c) { 
-            return '#' + c; } ).join(', ');
-          $(".tile").removeClass("tileSelected");
-          $(".tile").toggleClass('tileLoser');
-          $(winnerSetToID).addClass("tileSelected");
-          $("body").css('background', getWinnerColor());
-          setTimeout(function(){ winnerModal() }, 2200);
-          setTimeout(function(){ $("body").css('background', '#2e3846') }, 1000);
-          setTimeout(function(){ $getBoardAndText.fadeOut(1000) }, 1000);
+            $(".tile").off();
+            var winnerSetToID = winnerSet.map(function (c) {
+                return '#' + c;}).join(', ');
+            $(".tile").removeClass("tileSelected");
+            $(".tile").toggleClass('tileLoser');
+            $(winnerSetToID).addClass("tileSelected");
+            $("body").css('background', getWinnerColor());
+            setTimeout(function () {
+                winnerModal()
+            }, 2200);
+            setTimeout(function () {
+                $("body").css('background', '#2e3846')
+            }, 1500);
+            setTimeout(function () {
+                $getBoardAndText.fadeOut(1500)
+            }, 1000);
         } else {
-          switchPlayer();
-          $("#playerDisplay").text(currentPlayer);
+            switchPlayer();
+            $("#playerDisplay").text(currentPlayer);
         }
-    }
-  var playerVsPlayer = function () {
-    $getBoardAndText.css('visibility', 'visible');
-    $(".tile").click(function() {
-      executePlayerMove.call(this);
-      checkWinsGUIevents(checkWins());
-    });
-  };
+    };
 
-  var playerVsComputer = function () {
-    $getBoardAndText.css('visibility', 'visible');
-    $(".tile").click(function() {
-      executePlayerMove.call(this);
-      checkWinsGUIevents(checkWins());
-      executeComputerMove();
-      checkWinsGUIevents(checkWins());
-    });
-  };
+    // Executes player move function on click
+    // Check for wins and applies GUI changes
+    var playerVsPlayer = function () {
+        $(".tile").click(function () {
+            executePlayerMove.call(this);
+            checkWinsGUIevents(checkWins());
+        });
+    };
 
+    // Executes player move function on click
+    // Check for wins and applies GUI changes
+    // Executes computer move function
+    // Check for wins and applies GUI changes
+    var playerVsComputer = function () {
+        $(".tile").click(function () {
+            executePlayerMove.call(this);
+            checkWinsGUIevents(checkWins());
+            executeComputerMove();
+            checkWinsGUIevents(checkWins());
+        });
+    };
+
+    // Resets board data
+    // Removes all added classes relating to player moves
+    // Changes text in tiles ('X' or 'O') to '&nbsp;'
+    // '&nbsp;' was used to resolve line height issue changing tile position
+    // Checks current game type and re-initiates appropriate game 
+    var resetBoard = function () {
+        $(".tile").removeClass("tileSelected");
+        $(".tile").removeClass('tileLoser');
+        $(".tile").removeClass('tileTextX');
+        $(".tile").removeClass('tileTextO');
+        $(".tile").html('&nbsp;');
+        resetBoardData();
+        $getBoardAndText.css('visibility', 'visible');
+        $getBoardAndText.fadeIn(1500);
+        if (gameTypeInPlay === 'vsPlayer') {
+            playerVsPlayer();
+        } else {
+            playerVsComputer();
+        }
+    };
 
 });
