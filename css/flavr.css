@@ -101,7 +101,7 @@
 }
 .flavr-container .flavr-fixer {
   position: relative;
-  margin: 12% auto 0;
+  margin: 8% auto 0;
   display: inline-block;
   width: auto;
   pointer-events: auto;
@@ -252,7 +252,7 @@
   outline: none;
   display: block;
   text-decoration: none !important;
-  padding: 50px 12px;
+  padding: 50px 50px;
   margin-top: 13px;
   margin-bottom: 4px;
   letter-spacing: 0.05em;

@@ -3,6 +3,11 @@
 body {
 	background: #2e3846;
 	font-family: 'Fredoka One', cursive;
+	transition: background 0.8s ease 0s;  
+		-ms-transition: background 0.8s ease 0s;
+		-moz-transition: background 0.8s ease 0s;
+	  	-o-transition: background 0.8s ease 0s;
+	  	-webkit-transition: background 0.8s ease 0s;
 }
 
 h1 {
@@ -78,7 +83,21 @@ h1 {
   		-o-transition: all .1s ease-in-out;
 }
 
-.hide {
-	visibility: n;
+.xWinBG {
+	background: #2e3846;
+	transition: all .1s ease-in-out;
+		-webkit-transition: all .1s ease-in-out;
+  		-moz-transition: all .1s ease-in-out;
+  		-ms-transition: all .1s ease-in-out;
+  		-o-transition: all .1s ease-in-out;
+}
+
+.oWinBG {
+	visibility: visible;
+	transition: all .1s ease-in-out;
+		-webkit-transition: all .1s ease-in-out;
+  		-moz-transition: all .1s ease-in-out;
+  		-ms-transition: all .1s ease-in-out;
+  		-o-transition: all .1s ease-in-out;
 }
 
