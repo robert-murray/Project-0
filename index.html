@@ -5,27 +5,32 @@
 	<title>Document</title>
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/animate.css" />
+	<link rel="stylesheet" type="text/css" href="css/flavr.css" />
 	<script src="js/jquery.min.js"></script>
+
 	<script src="js/game.js"></script>
 	<script src="js/gui.js"></script>
+	<script type="text/javascript" src="js/flavr.js"></script>
 </head>
 <body>
-	<h1>Current player: <span id="playerDisplay"></span></h1>
+	<div class="message"></div>
+	<h1 id="currentPlayerH1">Current player: <span id="playerDisplay"></span></h1>
 	<div class="board">
 		<div class="row">
-			<div class="tile" id="A">?</div>
-			<div class="tile" id="B">?</div>
-			<div class="tile" id="C">?</div>
+			<div class="tile" id="A">&nbsp;</div>
+			<div class="tile" id="B">&nbsp;</div>
+			<div class="tile" id="C">&nbsp;</div>
 		</div>
 		<div class="row">
-			<div class="tile" id="D">?</div>
-			<div class="tile" id="E">?</div>
-			<div class="tile" id="F">?</div>
+			<div class="tile" id="D">&nbsp;</div>
+			<div class="tile" id="E">&nbsp;</div>
+			<div class="tile" id="F">&nbsp;</div>
 		</div>
 		<div class="row">
-			<div class="tile" id="G">?</div>
-			<div class="tile" id="H">?</div>
-			<div class="tile" id="I">?</div>
+			<div class="tile" id="G">&nbsp;</div>
+			<div class="tile" id="H">&nbsp;</div>
+			<div class="tile" id="I">&nbsp;</div>
 		</div>
 	</div>
 	<h1 id="winnerDisplay"></h1>

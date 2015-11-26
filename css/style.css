@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Fredoka+One);
 
 body {
-	background: #00557b;
+	background: #2e3846;
 	font-family: 'Fredoka One', cursive;
 }
 
@@ -60,7 +60,7 @@ h1 {
 }
 
 .tileLoser {
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: rgba(255, 255, 255, 0.4);
 	color: rgba(255, 255, 255, 0.3);
 	transition: all .3s ease-in-out;
 		-webkit-transition: all .3s ease-in-out;
@@ -77,3 +77,8 @@ h1 {
   		-ms-transition: all .1s ease-in-out;
   		-o-transition: all .1s ease-in-out;
 }
+
+.hide {
+	visibility: n;
+}
+
