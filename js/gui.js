@@ -1,3 +1,4 @@
+var gameWon = false;
 $(document).ready(function () {
     
     // sets variable to record game type 
@@ -38,7 +39,9 @@ $(document).ready(function () {
     // Winner modal using flavr.js plugin
     // Has option to replay opponant or reset game (via page reload)
     var winnerModal = function () {
+        gameWon = true;
         var winnerTitle = "THE WINNER IS " + winner;
+        console.log( "laknalkna" )
         new $.flavr({
             title: winnerTitle,
             content: 'Would you like to play again?',
@@ -50,6 +53,7 @@ $(document).ready(function () {
                     style: 'primary',
                     addClass: 'submit-btn',
                     action: function () {
+                        $(".flavr-container").remove();
                         resetBoard();
                     }
                 },
@@ -98,6 +102,7 @@ $(document).ready(function () {
     // Assigns current player's colour to selected tile's text (html element)
     // Turns off click function for selected tile
     var executePlayerMove = function () {
+        if ( gameWon ) { return; }
         placePlayerPiece(currentPlayer, $(this).attr('id'));
         $(this).text(currentPlayer);
         $(this).addClass("tileSelected");
@@ -113,6 +118,7 @@ $(document).ready(function () {
     // Assigns current player's colour to tile's text (html element)
     // Turns off click function for selected tile
     var executeComputerMove = function () {
+        if ( gameWon ) { return; }
         var setComputerMove = computerMove();
         var computerMoveToID = '#' + setComputerMove;
         placePlayerPiece(currentPlayer, setComputerMove);
@@ -128,8 +134,8 @@ $(document).ready(function () {
     // Fades BG color to winners color
     // Fades BG back to default color
     // Displays winner modal
-    var checkWinsGUIevents = function () {
-        if (checkWins()) {
+    var checkWinsGUIevents = function (e) {
+        if (checkWins() && !gameWon) {
             $(".tile").off();
             var winnerSetToID = winnerSet.map(function (c) {
                 return '#' + c;}).join(', ');
@@ -138,7 +144,13 @@ $(document).ready(function () {
             $(winnerSetToID).addClass("tileSelected");
             $("body").css('background', getWinnerColor());
             setTimeout(function () {
-                winnerModal()
+                // Added local closure to prevent 
+                // timeout scope issue where winner modal
+                // initiates multiple times while timeout event
+                // is still in action
+                if ( !gameWon ) {
+                    winnerModal()
+                }
             }, 2200);
             setTimeout(function () {
                 $("body").css('background', '#2e3846')
@@ -155,6 +167,7 @@ $(document).ready(function () {
     // Executes player move function on click
     // Check for wins and applies GUI changes
     var playerVsPlayer = function () {
+        $(".tile").off();
         $(".tile").click(function () {
             executePlayerMove.call(this);
             checkWinsGUIevents(checkWins());
@@ -166,7 +179,11 @@ $(document).ready(function () {
     // Executes computer move function
     // Check for wins and applies GUI changes
     var playerVsComputer = function () {
-        $(".tile").click(function () {
+        $(".tile").off();
+        $(".tile").unbind("click");
+        $(".tile").click(function (e) {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
             executePlayerMove.call(this);
             checkWinsGUIevents(checkWins());
             executeComputerMove();
@@ -180,6 +197,9 @@ $(document).ready(function () {
     // '&nbsp;' was used to resolve line height issue changing tile position
     // Checks current game type and re-initiates appropriate game 
     var resetBoard = function () {
+        gameWon = false;
+        $(".tile").unbind("click");
+        $(".tile").off();
         $(".tile").removeClass("tileSelected");
         $(".tile").removeClass('tileLoser');
         $(".tile").removeClass('tileTextX');
