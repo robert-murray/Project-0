@@ -41,12 +41,42 @@ $(document).ready(function () {
     var winnerModal = function () {
         gameWon = true;
         var winnerTitle = "THE WINNER IS " + winner;
-        console.log( "laknalkna" )
         new $.flavr({
             title: winnerTitle,
             content: 'Would you like to play again?',
             iconPath: 'images/',
             icon: 'star.png',
+            buttons: {
+                pvpButton: {
+                    text: 'Yes, play opponant again',
+                    style: 'primary',
+                    addClass: 'submit-btn',
+                    action: function () {
+                        $(".flavr-container").remove();
+                        resetBoard();
+                    }
+                },
+                pvcButton: {
+                    text: 'No, go to the main menu',
+                    style: 'danger',
+                    addClass: 'submit-btn',
+                    action: function () {
+                        location.reload();
+                    }
+                }
+            },
+            buttonDisplay: 'stacked'
+        });
+    };
+
+    // Tie modal using flavr.js plugin
+    // Has option to replay opponant or reset game (via page reload)
+    var tieModal = function () {
+        gameWon = true;
+        var winnerTitle = "IT'S A " + winner;
+        new $.flavr({
+            title: winnerTitle,
+            content: 'Would you like to play again?',
             buttons: {
                 pvpButton: {
                     text: 'Yes, play opponant again',
@@ -95,7 +125,7 @@ $(document).ready(function () {
             return '#399c95';
         }
     };
-
+    var playCount = 0;
     // Assign current player string ('X' or 'O') to board object 
     // Uses selected tile's ID to wirite to appropriate key in board data
     // Assigns current player string to selected tile's text (html element)
@@ -108,6 +138,7 @@ $(document).ready(function () {
         $(this).addClass("tileSelected");
         $(this).addClass(getPlayerColor());
         $(this).off();
+        playCount++;
     };
 
     // Assign current player string ('X' or 'O') to board object 
@@ -126,6 +157,7 @@ $(document).ready(function () {
         $(computerMoveToID).addClass("tileSelected");
         $(computerMoveToID).addClass(getPlayerColor());
         $(computerMoveToID).off();
+        playCount++;
     };
 
     // Truns off click function for all tiles
@@ -158,6 +190,29 @@ $(document).ready(function () {
             setTimeout(function () {
                 $getBoardAndText.fadeOut(1500)
             }, 1000);
+        } else if (playCount === 9) {
+            $(".tile").off();
+            
+            $(".tile").removeClass("tileSelected");
+            $(".tile").toggleClass('tileLoser');
+            $(winnerSetToID).addClass("tileSelected");
+            $("body").css('background', '#CCCCCC');
+            winner = "TIE";
+            setTimeout(function () {
+                // Added local closure to prevent 
+                // timeout scope issue where winner modal
+                // initiates multiple times while timeout event
+                // is still in action
+                if ( !gameWon ) {
+                    tieModal()
+                }
+            }, 2200);
+            setTimeout(function () {
+                $("body").css('background', '#2e3846')
+            }, 1500);
+            setTimeout(function () {
+                $getBoardAndText.fadeOut(1500)
+            }, 1000);
         } else {
             switchPlayer();
             $("#playerDisplay").text(currentPlayer);
@@ -182,8 +237,6 @@ $(document).ready(function () {
         $(".tile").off();
         $(".tile").unbind("click");
         $(".tile").click(function (e) {
-            e.stopPropagation();
-            e.stopImmediatePropagation();
             executePlayerMove.call(this);
             checkWinsGUIevents(checkWins());
             executeComputerMove();
@@ -206,6 +259,7 @@ $(document).ready(function () {
         $(".tile").removeClass('tileTextO');
         $(".tile").html('&nbsp;');
         resetBoardData();
+        playCount = 0;
         $getBoardAndText.css('visibility', 'visible');
         $getBoardAndText.fadeIn(1500);
         if (gameTypeInPlay === 'vsPlayer') {
